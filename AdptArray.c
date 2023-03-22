@@ -23,18 +23,14 @@ struct AdptArray_
 PAdptArray CreateAdptArray(COPY_FUNC copy_func, DEL_FUNC del_func, PRINT_FUNC print_func)
 {
    struct AdptArray_ *parr = malloc(sizeof(struct AdptArray_*));
-   printf("Size of parr : %lu\n", sizeof(parr));
+   printf("HERE\n");
    parr->print_func = print_func;
    parr->del_func = del_func;
    parr->copy_func = copy_func;
    parr->length = 0;
    parr->size = 1;
    parr->indexarr = malloc(sizeof(int));
-   printf("Size of indexarr : %lu\n", sizeof(parr -> indexarr));
-   printf("Size of int: %lu\n", sizeof(int));
    parr->arr = malloc(sizeof(PElement)); // Starting size of 1
-   printf("Size of arr : %lu\n", sizeof(parr -> arr));
-   printf("Size of pelement : %lu\n", sizeof(PElement));
    if (parr -> indexarr == NULL || parr -> arr == NULL)
    {
       parr->length = -1;
@@ -50,7 +46,7 @@ void DeleteAdptArray(PAdptArray parr)
    {
       parr->del_func(parr->arr[parr->indexarr[i]]); // Delete the element at the index kept by the index array at i
       free(parr->arr[i]);
-   }
+   }  
    free(parr->arr);
    free(parr->indexarr);
    free(parr);
@@ -78,6 +74,7 @@ Result SetAdptArrayAt(PAdptArray parr, int index, PElement pel)
       { // Index given is larger than the size of arr
          parr->size = index;
          printf("A\n");
+         printf("%ld\n", index * sizeof(PElement));
          parr->arr = realloc(parr->arr, index * sizeof(PElement));
          printf("B\n");
          if (parr->arr == NULL)
@@ -87,14 +84,15 @@ Result SetAdptArrayAt(PAdptArray parr, int index, PElement pel)
       }
       parr->arr[index] = new_pel;
       parr->length++;
-      printf("C\n");
-      parr->indexarr = realloc(parr->indexarr, parr->length * sizeof(int));
+      printf("parr length: %d\n", parr->length);
+      parr->indexarr = realloc(parr->indexarr, sizeof(int));
       printf("D\n");
       if (parr->indexarr == NULL)
       {
          return FAIL;
       }
       parr->indexarr[parr->length] = index;
+      printf("Added to index array\n");
    }
    else
    { // Index is used in parr
